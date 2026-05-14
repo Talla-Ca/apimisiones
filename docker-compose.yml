@@ -1,0 +1,12 @@
+version: '3.8'
+
+services:
+  api:
+    build: .
+    ports:
+      - "8000:8000"
+    volumes:
+      - ./rpg.db:/app/rpg.db
+    environment:
+      - PYTHONUNBUFFERED=1
+    restart: unless-stopped
