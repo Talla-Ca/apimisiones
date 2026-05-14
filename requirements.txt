@@ -3,3 +3,5 @@ uvicorn
 pydantic
 requests
 gunicorn
+#PyQt6
+#PyQt6-sip

@@ -63,3 +63,61 @@ Ejecutar pruebas locales:
 python test_endpoints.py
 
 Necesita que la API este corriendo en http://localhost:8000
+
+
+Integracion con render 
+
+# Guía de Integración - RPG Daily Quests API
+
+Base URL: https://apimisiones.onrender.com
+
+## Documentación Interactiva
+https://apimisiones.onrender.com/docs
+
+## Health Check
+GET https://apimisiones.onrender.com/
+
+Respuesta esperada:
+{
+  "titulo": "RPG Daily Quests API",
+  "version": "1.0",
+  "status": "online"
+}
+
+## Crear Misión (Recomendado)
+POST https://apimisiones.onrender.com/misiones/auto
+
+Body:
+{
+  "descripcion": "Tu misión aquí",
+  "xp": 100
+}
+
+Respuesta:
+{
+  "mensaje": "Misión creada automáticamente",
+  "id": 1,
+  "mision": {...}
+}
+
+## Obtener Misiones
+GET https://apimisiones.onrender.com/misiones
+
+## Completar Misión
+PUT https://apimisiones.onrender.com/misiones/{id}/completar
+
+Respuesta:
+{
+  "mensaje": "Misión completada",
+  "xp_ganada": 100
+}
+
+## Ver Estadísticas
+GET https://apimisiones.onrender.com/estadisticas
+
+Respuesta:
+{
+  "misiones_pendientes": 3,
+  "misiones_completadas": 5,
+  "xp_total_ganada": 750
+}
