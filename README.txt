@@ -25,6 +25,9 @@ Docs: http://localhost:8000/docs
 Desplegar en Render (ya se lanzo)
 
 usa: (https://apimisiones.onrender.com) 
+74.220.48.0/24
+74.220.56.0/24
+
 Puedes utilizar desktop de ejemplo para ver como hacer la conexion y el uso de la api
 
 1. Crear cuenta en https://render.com
@@ -51,10 +54,6 @@ apimisiones/
 Variables de Entorno
 
 Actualmente la API no necesita variables de entorno.
-En futuro puedes agregar:
-- DATABASE_URL
-- SECRET_KEY
-- LOG_LEVEL
 
 Documentacion
 
