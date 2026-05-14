@@ -49,18 +49,20 @@ class MisionCrear(BaseModel):
     estado: str = "pendiente"
 
 
-@app.get("/")
+@app.get("/", tags=["Health"])
+@app.head("/", tags=["Health"])
 def root():
-    """Endpoint raíz con información de la API"""
+    """Endpoint raíz con información de la API - Health check"""
     return {
         "titulo": "RPG Daily Quests API",
         "version": "1.0",
         "descripcion": "API de misiones estilo RPG para estudiantes universitarios",
-        "documentacion": "/docs"
+        "documentacion": "/docs",
+        "status": "online"
     }
 
 
-@app.get("/estadisticas")
+@app.get("/estadisticas", tags=["Estadisticas"])
 def obtener_estadisticas():
     """Obtiene estadísticas de misiones y experiencia"""
     cursor.execute("SELECT COUNT(*) FROM misiones WHERE estado='pendiente'")
@@ -79,8 +81,9 @@ def obtener_estadisticas():
     }
 
 
-@app.get("/misiones/completadas")
+@app.get("/misiones/completadas", tags=["Misiones"])
 def ver_historial():
+    """Ver historial de misiones completadas"""
     cursor.execute("SELECT * FROM historial")
     rows = cursor.fetchall()
 
@@ -90,8 +93,9 @@ def ver_historial():
     ]
 
 
-@app.get("/misiones")
+@app.get("/misiones", tags=["Misiones"])
 def get_misiones():
+    """Obtener todas las misiones pendientes"""
     cursor.execute("SELECT * FROM misiones")
     rows = cursor.fetchall()
 
@@ -101,8 +105,9 @@ def get_misiones():
     ]
 
 
-@app.get("/misiones/{mision_id}")
+@app.get("/misiones/{mision_id}", tags=["Misiones"])
 def get_mision(mision_id: int):
+    """Obtener una misión específica por su ID"""
     cursor.execute("SELECT * FROM misiones WHERE id=?", (mision_id,))
     row = cursor.fetchone()
 
@@ -112,13 +117,14 @@ def get_mision(mision_id: int):
     return {"id": row[0], "descripcion": row[1], "xp": row[2], "estado": row[3], "fecha_creacion": row[4]}
 
 
-@app.post("/misiones")
+@app.post("/misiones", tags=["Misiones"])
 def crear_mision(mision: Mision):
+    """Crear una nueva misión especificando el ID"""
     cursor.execute("SELECT COUNT(*) FROM misiones")
     total = cursor.fetchone()[0]
 
     if total >= 10:
-        return {"error": "Máximo 10 misiones activas"}
+        raise HTTPException(status_code=400, detail="Máximo 10 misiones activas")
 
     cursor.execute(
         "INSERT INTO misiones (id, descripcion, xp, estado) VALUES (?, ?, ?, ?)",
@@ -129,9 +135,9 @@ def crear_mision(mision: Mision):
     return {"mensaje": "Misión creada", "mision": mision}
 
 
-@app.post("/misiones/auto")
+@app.post("/misiones/auto", tags=["Misiones"])
 def crear_mision_auto(mision: MisionCrear):
-    """Genera automáticamente un ID para la misión"""
+    """Crear una nueva misión con ID generado automáticamente"""
     cursor.execute("SELECT MAX(id) FROM misiones")
     max_id = cursor.fetchone()[0]
     nuevo_id = (max_id or 0) + 1
@@ -155,8 +161,9 @@ def crear_mision_auto(mision: MisionCrear):
     }
 
 
-@app.put("/misiones/{mision_id}")
+@app.put("/misiones/{mision_id}", tags=["Misiones"])
 def actualizar_mision(mision_id: int, mision: Mision):
+    """Actualizar datos de una misión existente"""
     cursor.execute("SELECT * FROM misiones WHERE id=?", (mision_id,))
     if not cursor.fetchone():
         raise HTTPException(status_code=404, detail="Misión no encontrada")
@@ -170,8 +177,9 @@ def actualizar_mision(mision_id: int, mision: Mision):
     return {"mensaje": "Misión actualizada", "mision": mision}
 
 
-@app.put("/misiones/{mision_id}/completar")
+@app.put("/misiones/{mision_id}/completar", tags=["Misiones"])
 def completar_mision(mision_id: int):
+    """Marcar una misión como completada y guardar en historial"""
     cursor.execute("SELECT * FROM misiones WHERE id=?", (mision_id,))
     row = cursor.fetchone()
 
@@ -179,7 +187,7 @@ def completar_mision(mision_id: int):
         raise HTTPException(status_code=404, detail="Misión no encontrada")
 
     if row[3] == "completada":
-        return {"error": "La misión ya fue completada"}
+        raise HTTPException(status_code=400, detail="La misión ya fue completada")
 
     cursor.execute(
         "UPDATE misiones SET estado='completada' WHERE id=?",
@@ -199,8 +207,9 @@ def completar_mision(mision_id: int):
     }
 
 
-@app.delete("/misiones/{mision_id}")
+@app.delete("/misiones/{mision_id}", tags=["Misiones"])
 def eliminar_mision(mision_id: int):
+    """Eliminar una misión del sistema"""
     cursor.execute("SELECT * FROM misiones WHERE id=?", (mision_id,))
     if not cursor.fetchone():
         raise HTTPException(status_code=404, detail="Misión no encontrada")
