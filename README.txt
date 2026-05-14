@@ -22,7 +22,10 @@ python -m uvicorn APIMisiones:app --reload
 API: http://localhost:8000
 Docs: http://localhost:8000/docs
 
-Desplegar en Render
+Desplegar en Render (ya se lanzo)
+
+usa: (https://apimisiones.onrender.com) 
+Puedes utilizar desktop de ejemplo para ver como hacer la conexion y el uso de la api
 
 1. Crear cuenta en https://render.com
 2. Conectar repositorio de GitHub
