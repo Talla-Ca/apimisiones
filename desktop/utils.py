@@ -43,8 +43,9 @@ class Colors:
 class Constants:
     """Constantes de la aplicación"""
     
-    API_BASE_URL = "https://apimisiones.onrender.com"
+    #API_BASE_URL = "https://apimisiones.onrender.com"
+    API_BASE_URL = "https://apirpguni.onrender.com" 
     MAX_MISIONES = 10
-    XP_PER_LEVEL = 500
+    XP_PER_LEVEL = 200
     APP_TITLE = "⚔️ RPG Daily Quests"
     APP_VERSION = "1.0"

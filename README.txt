@@ -48,10 +48,6 @@ apimisiones/
 Variables de Entorno
 
 Actualmente la API no necesita variables de entorno.
-En futuro puedes agregar:
-- DATABASE_URL
-- SECRET_KEY
-- LOG_LEVEL
 
 Documentacion
 
